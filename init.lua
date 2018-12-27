@@ -24,6 +24,8 @@ sfinv_menu = {}
 -- Carregar scripts
 notificar("Carregando scripts...")
 
+dofile(modpath.."/tradutor.lua")
+
 -- API
 dofile(modpath.."/api.lua")
 

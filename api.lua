@@ -9,6 +9,9 @@
 	API
   ]]
 
+-- Tradutor de Strings
+local S = sfinv_menu.S
+
 -- Lista de botoes registrados
 sfinv_menu.botoes_registrados = {}
 
@@ -61,7 +64,7 @@ sfinv_menu.registrar_botao = function(id, def)
 		aba_sfinv_criada = true
 		
 		sfinv.register_page("sfinv_menu:conf", {
-			title = "Conf",
+			title = S("Mais"),
 			get = function(self, player, context)
 				
 				-- Lista de botoes
