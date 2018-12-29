@@ -1,16 +1,16 @@
 --[[
-	Mod Sfinv_menu para Minetest
+	Mod Sfinv_menu for Minetest
 	Copyright (C) 2018 BrunoMine (https://github.com/BrunoMine)
 	
-	Recebeste uma cópia da GNU Lesser General
-	Public License junto com esse software,
-	se não, veja em <http://www.gnu.org/licenses/>. 
+	You have received a copy of the GNU Lesser 
+	General Public License with this software,
+	if not, see <http://www.gnu.org/licenses/>. 
 	
-	Inicializador de variaveis e scripts
+	initializer
   ]]
 
--- Notificador de Inicializador
-local notificar = function(msg)
+-- Notify
+local notify = function(msg)
 	if minetest.setting_get("log_mods") then
 		minetest.debug("[Sfinv_menu]"..msg)
 	end
@@ -18,16 +18,16 @@ end
 
 local modpath = minetest.get_modpath("sfinv_menu")
 
--- Variavel global
+-- Global index
 sfinv_menu = {}
 
--- Carregar scripts
-notificar("Carregando scripts...")
+-- Load scripts
+notify("Loading scripts...")
 
 dofile(modpath.."/tradutor.lua")
 
 -- API
 dofile(modpath.."/api.lua")
 
-notificar("OK")
+notify("OK")
 

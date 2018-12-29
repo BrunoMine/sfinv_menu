@@ -1,28 +1,28 @@
 --[[
-	Mod Sfinv_menu para Minetest
+	Mod Sfinv_menu for Minetest
 	Copyright (C) 2018 BrunoMine (https://github.com/BrunoMine)
 	
-	Recebeste uma cópia da GNU Lesser General
-	Public License junto com esse software,
-	se não, veja em <http://www.gnu.org/licenses/>. 
+	You have received a copy of the GNU Lesser 
+	General Public License with this software,
+	if not, see <http://www.gnu.org/licenses/>. 
 	
 	API
   ]]
 
--- Tradutor de Strings
+-- String translator
 local S = sfinv_menu.S
 
--- Lista de botoes registrados
-sfinv_menu.botoes_registrados = {}
+-- Registered button table
+sfinv_menu.registered_button = {}
 
--- Numero de registros
-sfinv_menu.n_botoes_registrados = 0
+-- Number of registered button
+sfinv_menu.n_registered_button = 0
 
--- Registra aba no sfinv (caso o mod seja usado)
-local aba_sfinv_criada = false
+-- Register tab in sfinv
+local sfinv_tab_created = false
 
--- Botoes de formspec
-local botoes_formspec = {
+-- Formspec buttons table
+local formspec_buttons = {
 	{"image[0,0;1,1;", "]button[1,0;3,1;", ";", "]"},
 	{"image[0,1;1,1;", "]button[1,1;3,1;", ";", "]"},
 	{"image[0,2;1,1;", "]button[1,2;3,1;", ";", "]"},
@@ -33,47 +33,39 @@ local botoes_formspec = {
 	{"image[4,3;1,1;", "]button[5,3;3,1;", ";", "]"}
 }
 
--- Registrar botão
---[[
-	def = {
-		titulo = "Titulo", -- Titulo exibido no botao
-		icon = "image.png", -- imagem quadrada
-		privs = {}, -- Privilegios requeridos
-		func = function(player) end, -- função executada quando o botao é clicado
-	}
-  ]]
-sfinv_menu.registrar_botao = function(id, def)
+-- Register button
+sfinv_menu.register_button = function(id, def)
 	
 	
-	-- Verifica se ja atingiu limite de botoes
-	if sfinv_menu.n_botoes_registrados + 1 > 8 then
-		minetest.log("error", "[Sfinv_menu] Erro ao registrar botao '"..id.."'. Limite de 8 botoes excedido")
+	-- Check if you have already reached the button limit
+	if sfinv_menu.n_registered_button + 1 > 8 then
+		minetest.log("error", "[Sfinv_menu] Error on register '"..id.."'. Already reached the button limit (8 buttons).")
 		local i = 1
-		for idd,def in pairs(sfinv_menu.botoes_registrados) do
+		for idd,def in pairs(sfinv_menu.registered_button) do
 			minetest.log("error", i.." - "..idd)
 			i = i + 1
 		end
 		return false
 	end
 	
-	sfinv_menu.botoes_registrados[id] = def
-	sfinv_menu.n_botoes_registrados = sfinv_menu.n_botoes_registrados + 1
+	sfinv_menu.registered_button[id] = def
+	sfinv_menu.n_registered_button = sfinv_menu.n_registered_button + 1
 	
-	-- Verifica se ja registrou a aba
-	if aba_sfinv_criada == false then
-		aba_sfinv_criada = true
+	-- Check if sfinv_tab is registered
+	if sfinv_tab_created == false then
+		sfinv_tab_created = true
 		
-		sfinv.register_page("sfinv_menu:conf", {
+		sfinv.register_page("sfinv_menu:more", {
 			title = S("Mais"),
 			get = function(self, player, context)
 				
-				-- Lista de botoes
+				-- Make button list
 				local formspec = ""
 				local i = 1
-				for id,def in pairs(sfinv_menu.botoes_registrados) do
-					-- verifica se tem privilegios
+				for id,def in pairs(sfinv_menu.registered_button) do
+					-- check privs
 					if minetest.check_player_privs(player:get_player_name(), def.privs or {}) == true then
-						local f = botoes_formspec[i]
+						local f = formspec_buttons[i]
 						formspec = formspec .. f[1] .. def.icon .. f[2] .. id .. f[3] .. def.titulo .. f[4]
 						i = i + 1
 					end
@@ -95,8 +87,8 @@ sfinv_menu.registrar_botao = function(id, def)
 			end,
 			on_player_receive_fields = function(self, player, context, fields)
 				for f,d in pairs(fields) do
-					if sfinv_menu.botoes_registrados[f] then
-						sfinv_menu.botoes_registrados[f].func(player)
+					if sfinv_menu.registered_button[f] then
+						sfinv_menu.registered_button[f].func(player)
 						return
 					end
 				end
@@ -106,5 +98,4 @@ sfinv_menu.registrar_botao = function(id, def)
 	
 	return true
 end
-
 
