@@ -66,7 +66,7 @@ sfinv_menu.register_button = function(id, def)
 					-- check privs
 					if minetest.check_player_privs(player:get_player_name(), def.privs or {}) == true then
 						local f = formspec_buttons[i]
-						formspec = formspec .. f[1] .. def.icon .. f[2] .. id .. f[3] .. def.titulo .. f[4]
+						formspec = formspec .. f[1] .. def.icon .. f[2] .. id .. f[3] .. def.title .. f[4]
 						i = i + 1
 					end
 				end
